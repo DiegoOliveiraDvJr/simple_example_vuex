@@ -1,6 +1,6 @@
 <template>
     <div class="carrinho container mt-5">
-        {{ $store.state.users }}
+        {{ cart }}
         <div class="row">
 
             <div class="card shadow-sm col" v-for="product in products" :key="product.id">
