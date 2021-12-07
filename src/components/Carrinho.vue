@@ -1,6 +1,6 @@
 <template>
     <div class="carrinho container mt-5">
-        {{ $store.state.cart }}
+        {{ $store.state.users }}
         <div class="row">
 
             <div class="card shadow-sm col" v-for="product in products" :key="product.id">
@@ -11,6 +11,8 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <button type="button" class="btn btn-sm btn-outline-secondary" @click="addToCart(product)">Adicionar</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" @click="removeToCart(product)" v-if="showQnt(product.id)">remover</button>
+                            
                         </div>
                         <small class="text-muted" v-if="showQnt(product.id)">{{ showQnt(product.id) }}</small>
                     </div>
@@ -22,6 +24,7 @@
     </div>
 </template>
 <script>
+import { mapState, mapMutations } from 'vuex';
 export default {
     name: 'Carrinho',
     data() {
@@ -34,13 +37,22 @@ export default {
             ],
         }
     },
+    computed: {
+        ...mapState({
+            cart: state => state.cart
+        })
+    },
     methods: {
-        addToCart(product) {
-            this.$store.commit('addProduct', product);
-        },
+        ...mapMutations(['ADD_PRODUCT', 'REMOVE_PRODUCT']),
 
+        addToCart(product) {
+            this.ADD_PRODUCT(product);
+        },
+        removeToCart(product) {
+            this.REMOVE_PRODUCT(product);
+        },
         showQnt(id) {
-            return this.$store.state.cart.find( p => p.id === id)?.qnt || 0;
+            return this.cart.find( p => p.id === id)?.qnt || 0;
         }
     },
 

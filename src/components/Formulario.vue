@@ -1,6 +1,6 @@
 <template>
     <div class="Form w-100 h-100 d-flex flex-column  align-items-center">
-        <h1>{{ $store.state.user.first_name }} {{ $store.state.user.last_name }}</h1>
+        <h1>{{ fullName }}</h1>
 
         <form>
             <div class="mb-3">
@@ -18,6 +18,7 @@
     
 </template>
 <script>
+import { mapState, mapGetters, mapMutations } from 'vuex';
 export default {
     name: 'Formulario',
     data() {
@@ -26,27 +27,32 @@ export default {
         }
     },
     computed: {
+        ...mapGetters(['fullName']),
+        ...mapState({
+            user: state => state.user
+        }),
         firstName: {
             get() {
-                return this.$store.state.user.first_name;
+                return this.user.first_name;
             },
             set(value) {
-                this.$store.commit('saveFirstName', value);
+                this.SAVE_FIRST_NAME(value);
             }
         },
         lastName: {
             get() {
-                return this.$store.state.user.last_name;
+                return this.user.last_name;
             },
             set(value) {
-                this.$store.commit('saveLastName', value);
+                this.SAVE_LAST_NAME(value);
             }
         }
     },
     methods: {
+        ...mapMutations(['SAVE_FIRST_NAME', 'SAVE_LAST_NAME']),
       saveName(){
         //action
-        this.$store.commit('saveFirstName', this.myName);
+        this.SAVE_FIRST_NAME(this.myName);
 
         //mutation
         //this.$store.commit()

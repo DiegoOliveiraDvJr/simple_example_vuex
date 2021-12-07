@@ -14,7 +14,7 @@ export default createStore({
   mutations: {
     
     //cart
-    addProduct(state, payload) {
+    ADD_PRODUCT(state, payload) {
       const existProduct = state.cart.find( p => p.id === payload.id);
       
       if(existProduct) {
@@ -25,12 +25,30 @@ export default createStore({
       }
       
     },
+    REMOVE_PRODUCT(state, payload) {
+      const existProduct = state.cart.find( p => p.id === payload.id);
+      
+      if(existProduct) {
+        
+        if(existProduct.qnt > 1){
+
+          existProduct.qnt--;
+
+        }else{
+          const productIndex = state.cart.findIndex( p => p.id === payload.id);
+          state.cart.splice(productIndex, 1)
+
+        }
+
+      }
+
+    },
 
     //user
-    saveFirstName(state, payload) {
+    SAVE_FIRST_NAME(state, payload) {
       state.user.first_name = payload;
     },
-    saveLastName(state, payload){
+    SAVE_LAST_NAME(state, payload){
       state.user.last_name = payload;
     }
 
@@ -40,6 +58,21 @@ export default createStore({
       context.commit('saveFirstName', payload)
     }
   },
+  getters: {
+    fullName(state) {
+      return `${state.user.first_name} ${state.user.last_name}`
+    }
+  },
   modules: {
+    users: {
+      state: () => ({
+        first_name: 'tiago'
+      }),
+      mutations: {},
+      actions: {},
+      getters: {},
+      
+    }
   }
+
 })
